@@ -1,5 +1,7 @@
-import React, {useState, useEffect} from "react";
+import React, {useState, useEffect, Suspense} from "react";
 import axios from "axios";
+import Section from "../../../components/StudySection";
+import Loading from "../../loading";
 
 interface Study {
     id: number;
@@ -20,18 +22,14 @@ const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
 //     return response;
 // }
 
-async function getStudies() {
-    const response = await fetch(API_HOST + '/studies');
-    const json = await response.json();
-    return json;
-}
 
 export default async function Studies() {
-    const studies = await getStudies();
 
     return (
         <div>
-            <h1>{JSON.stringify(studies)}</h1>
+            <Suspense fallback={<Loading />}>
+                <Section />
+            </Suspense>
         </div>
     );
 }

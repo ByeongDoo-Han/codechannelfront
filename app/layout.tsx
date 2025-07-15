@@ -1,5 +1,8 @@
 import React from "react";
 import Navigation from "../components/Navigation";
+import "../styles/global.css";
+import DarkModeProvider from "./provider/DarkModeProvider";
+import AuthProvider from "./provider/AuthProvider";
 
 export const metadata = {
   title:{
@@ -17,8 +20,12 @@ export default function RootLayout({
   return (
     <html lang="en">
       <body>
-        <Navigation />
-          {children}
+        <AuthProvider>
+          <DarkModeProvider>
+            <Navigation />
+            {children}
+          </DarkModeProvider>
+        </AuthProvider>
       </body>
     </html>
   )
