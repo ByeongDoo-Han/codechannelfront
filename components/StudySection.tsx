@@ -1,30 +1,23 @@
 "use client";
-import React from "react";
+import React, { useState } from "react";
 import { useDarkMode } from "../app/context/DarkModeContext";
-
-interface Study {
-  id: number;
-  name: string;
-  date: string;
-  location: string;
-  memberCount: number;
-  createdBy: string;
-  participants: string[];
-  color: string;
-  icon: string;
-}
+import axios from "axios";
+import useStudy, { Study } from "../app/context/StudyContext";
 
 interface UserSelections {
   [studyId: string]: 'attend' | 'unattend' | null;
 }
 
-
-
-export default async function StudySection({ studies }: { studies: Study[] }) {
-    const userSelections: UserSelections = {};
-
+export default function StudySection({ studies }: { studies: Study[] }) {
+    const [isAddStudyModalOpen, setIsAddStudyModalOpen] = useState(false);
+    const [isStudyDetailPopupOpen, setIsStudyDetailPopupOpen] = useState(false);
+    const [popupStudyId, setPopupStudyId] = useState<number | null>(null);
+    const [userSelections, setUserSelections] = useState<{ [studyId: string]: 'attend' | 'skip' | null }>({});
     const { isDarkMode, toggleDarkMode } = useDarkMode();
-
+    const openStudyDetailPopup = (studyId: number) => {
+      setPopupStudyId(studyId);
+      setIsStudyDetailPopupOpen(true);
+    };
     const openAddStudyModal = () => {
       setIsAddStudyModalOpen(true);
     };
@@ -39,13 +32,13 @@ export default async function StudySection({ studies }: { studies: Study[] }) {
   
     //   const currentSelection = userSelections[studyId];
     //   let newSelection: 'attend' | 'skip' | null = null;
-    //   let newCount = study.memberCount;
+    //   let newCount = study.participantCount;
   
     //   if (currentSelection === action) {
     //     // 같은 버튼을 다시 누르면 선택 해제 (off)
     //     newSelection = null;
     //     if (action === 'attend') {
-    //       newCount = Math.max(study.memberCount - 1, 0);
+    //       newCount = Math.max(study.participantCount - 1, 0);
     //       handleUnjoin(Number(study.id));
     //     }
     //   } else {
@@ -53,12 +46,12 @@ export default async function StudySection({ studies }: { studies: Study[] }) {
     //     newSelection = action;
     //     if (action === 'attend') {
     //       if (currentSelection !== 'skip') {
-    //         newCount = Math.min(study.memberCount + 1, study.maxParticipants || 50);
+    //         newCount = Math.min(study.participantCount + 1, study.maxParticipants || 50);
     //       }
     //       handleJoin(Number(study.id));
     //     } else { // action === 'skip'
     //       if (currentSelection === 'attend') {
-    //         newCount = Math.max(study.memberCount - 1, 0);
+    //         newCount = Math.max(study.participantCount - 1, 0);
     //       }
     //       handleUnjoin(Number(study.id));
     //     }
@@ -72,7 +65,7 @@ export default async function StudySection({ studies }: { studies: Study[] }) {
   
     //   updateStudy(Number(studyId), { participantCount: newCount });
     // };
-
+    
     return (
         <section className={`backdrop-blur-sm rounded-xl shadow-sm border p-4 sm:p-6 hover:shadow-md transition-all duration-300 ${
             isDarkMode 

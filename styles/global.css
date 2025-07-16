@@ -1,16 +1,72 @@
-/* body{
-    margin: 0;
-    padding: 0;
-    background-color: black;
-    font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, 'Open Sans', 'Helvetica Neue', sans-serif;    
-    color: white;
+@import "tailwindcss";
+
+:root {
+  --background: #ffffff;
+  --foreground: #171717;
 }
 
-a {
-    color: white;
-    text-decoration: none;
+@theme inline {
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
 }
 
-a:hover{
-    text-decoration: underline;
-} */
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background: #0a0a0a;
+    --foreground: #ededed;
+  }
+}
+
+html {
+  -webkit-touch-callout: none;
+}
+
+body {
+  background: var(--background);
+  color: var(--foreground);
+  font-family: Arial, Helvetica, sans-serif;
+  -webkit-text-size-adjust: 100%;
+}
+
+/* Landing Page Animations */
+@keyframes fadeInBlur {
+  0% {
+    opacity: 0;
+    filter: blur(20px);
+    transform: scale(1.1);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: scale(1);
+  }
+}
+
+@keyframes fadeInContent {
+  0% {
+    opacity: 0;
+    filter: blur(10px);
+    transform: translateY(30px);
+  }
+  100% {
+    opacity: 1;
+    filter: blur(0px);
+    transform: translateY(0px);
+  }
+}
+
+.bg-animate {
+  animation: fadeInBlur 3s ease-out forwards;
+}
+
+.content-animate {
+  animation: fadeInContent 2.5s ease-out 0.5s forwards;
+  opacity: 0;
+}
+
+.button-animate {
+  animation: fadeInContent 2.5s ease-out 1s forwards;
+  opacity: 0;
+}

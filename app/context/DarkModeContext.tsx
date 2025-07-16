@@ -1,5 +1,5 @@
-"use client"
-import React, { createContext, useContext } from "react";
+"use client";
+import { createContext, useContext } from "react";
 
 interface DarkModeContextType {
     isDarkMode: boolean;

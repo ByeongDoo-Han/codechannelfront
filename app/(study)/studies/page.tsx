@@ -28,7 +28,7 @@ export default async function Studies() {
     return (
         <div>
             <Suspense fallback={<Loading />}>
-                <Section />
+                <Section studies={[]} />
             </Suspense>
         </div>
     );
