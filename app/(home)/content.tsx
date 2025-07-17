@@ -141,7 +141,7 @@ const handleAttendance = (studyId: string, action: 'attend' | 'unattend') => {
     return (
         <>
             <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
-                <Header darkMode={isDarkMode} />
+                {/* <Header darkMode={isDarkMode} /> */}
                 <main className="container mx-auto px-4 sm:px-6 py-4 sm:py-6 lg:py-8">
                     {/* Main Grid */}
                     <div className="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">

@@ -1,6 +1,6 @@
 import React from "react";
 import Navigation from "../components/Navigation";
-import "../styles/global.css";
+import "@/styles/globals.css";
 import DarkModeProvider from "./provider/DarkModeProvider";
 import AuthProvider from "./provider/AuthProvider";
 import StudyProvider from "./provider/StudyProvider";
@@ -41,7 +41,7 @@ export default function RootLayout({
         <AuthProvider>
           <DarkModeProvider>
             <StudyProvider>
-              <Header />
+              {/* <Header /> */}
               <Navigation />
               {children}
             </StudyProvider>
