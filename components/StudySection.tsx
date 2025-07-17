@@ -2,69 +2,115 @@
 import React, { useState } from "react";
 import { useDarkMode } from "../app/context/DarkModeContext";
 import axios from "axios";
-import useStudy, { Study } from "../app/context/StudyContext";
+import useAuth from "../app/context/AuthContext";
+import useStudy from "../app/context/StudyContext";
+import { Study } from "../app/context/StudyContext";
 
 interface UserSelections {
   [studyId: string]: 'attend' | 'unattend' | null;
 }
 
-export default function StudySection({ studies }: { studies: Study[] }) {
+interface StudySectionProps {
+  studies: Study[];
+  selectedStudyId?: number | null;
+  userSelections: Record<string, 'attend' | 'unattend' | null>;
+  isDarkMode: boolean;
+
+  openAddStudyModal: () => void;
+  openStudyDetailPopup?: (id: number) => void;
+  setSelectedStudy: (id: number) => void;
+  handleAttendance: (id: string, action: 'attend' | 'unattend') => void;
+}
+
+// const {isLoggedIn, logout, joinedStudies } = useAuth();
+const {studies, updateStudy, userSelections} = useStudy();
+
+const handleJoin = async(id: number) => {
+  const accessToken = localStorage.getItem('accessToken');
+  console.log('요청 id:', id);
+  await axios.post(`http://localhost:8080/api/v1/join/studies/${id}`,
+    {
+      
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      withCredentials: true
+    }
+  )
+  .then(response => {
+    console.log('참석 성공:', response.data);
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
+
+const handleUnjoin = async(id: number) => {
+  const accessToken = localStorage.getItem('accessToken');
+  console.log('요청 id:', id);
+  await axios.post(`http://localhost:8080/api/v1/unjoin/studies/${id}`,
+    {
+      
+    },
+    {
+      headers: {
+        Authorization: `Bearer ${accessToken}`,
+      },
+      withCredentials: true
+    }
+  )
+  .then(response => {
+    console.log('불참석 성공:', response.data);
+    window.location.reload();
+  })
+  .catch(error => {
+    console.error(error);
+  });
+}
+
+export default function StudySection({ studies, userSelections, isDarkMode }: StudySectionProps) {
     const [isAddStudyModalOpen, setIsAddStudyModalOpen] = useState(false);
     const [isStudyDetailPopupOpen, setIsStudyDetailPopupOpen] = useState(false);
     const [popupStudyId, setPopupStudyId] = useState<number | null>(null);
-    const [userSelections, setUserSelections] = useState<{ [studyId: string]: 'attend' | 'skip' | null }>({});
-    const { isDarkMode, toggleDarkMode } = useDarkMode();
-    const openStudyDetailPopup = (studyId: number) => {
-      setPopupStudyId(studyId);
-      setIsStudyDetailPopupOpen(true);
+    const [selectedStudy, setSelectedStudy] = useState<number | null>(null);
+    
+    //참석/불참석처리
+    const handleAttendance = (studyId: number, action: 'attend' | 'unattend') => {
+      const study = studies.find(s => s.id === Number(studyId));
+      if (!study) return;
+  
+      const currentSelection = userSelections[studyId];
+      let newSelection: 'attend' | 'unattend' | null = null;
+      let newCount = study.participantCount;
+  
+      if (currentSelection === action) {
+        // 같은 버튼을 다시 누르면 선택 해제 (off)
+        newSelection = null;
+        if (action === 'attend') {
+          newCount = Math.max(study.participantCount - 1, 0);
+          handleUnjoin(Number(study.id));
+        }
+      } else {
+        // 다른 버튼을 누르거나 처음 누르는 경우 (on)
+        newSelection = action;
+        if (action === 'attend') {
+          if (currentSelection !== 'unattend') {
+            newCount = Math.min(study.participantCount + 1, study.maxParticipants || 50);
+          }
+          handleJoin(Number(study.id));
+        } else { // action === 'skip'
+          if (currentSelection === 'attend') {
+            newCount = Math.max(study.participantCount - 1, 0);
+          }
+          handleUnjoin(Number(study.id));
+        }
+      }
+  
+      updateStudy(Number(studyId), { participantCount: newCount });
     };
-    const openAddStudyModal = () => {
-      setIsAddStudyModalOpen(true);
-    };
-
-    const closeAddStudyModal = () => {
-      setIsAddStudyModalOpen(false);
-    };
-
-    // const handleAttendance = (studyId: string, action: 'attend' | 'skip') => {
-    //   const study = studies.find(s => s.id === Number(studyId));
-    //   if (!study) return;
-  
-    //   const currentSelection = userSelections[studyId];
-    //   let newSelection: 'attend' | 'skip' | null = null;
-    //   let newCount = study.participantCount;
-  
-    //   if (currentSelection === action) {
-    //     // 같은 버튼을 다시 누르면 선택 해제 (off)
-    //     newSelection = null;
-    //     if (action === 'attend') {
-    //       newCount = Math.max(study.participantCount - 1, 0);
-    //       handleUnjoin(Number(study.id));
-    //     }
-    //   } else {
-    //     // 다른 버튼을 누르거나 처음 누르는 경우 (on)
-    //     newSelection = action;
-    //     if (action === 'attend') {
-    //       if (currentSelection !== 'skip') {
-    //         newCount = Math.min(study.participantCount + 1, study.maxParticipants || 50);
-    //       }
-    //       handleJoin(Number(study.id));
-    //     } else { // action === 'skip'
-    //       if (currentSelection === 'attend') {
-    //         newCount = Math.max(study.participantCount - 1, 0);
-    //       }
-    //       handleUnjoin(Number(study.id));
-    //     }
-    //   }
-  
-    //   // 사용자 선택 상태 업데이트
-    //   setUserSelections(prev => ({
-    //     ...prev,
-    //     [studyId]: newSelection
-    //   }));
-  
-    //   updateStudy(Number(studyId), { participantCount: newCount });
-    // };
     
     return (
         <section className={`backdrop-blur-sm rounded-xl shadow-sm border p-4 sm:p-6 hover:shadow-md transition-all duration-300 ${
@@ -75,7 +121,7 @@ export default function StudySection({ studies }: { studies: Study[] }) {
             <div className="flex justify-between items-center">
             <h2 className={`text-lg sm:text-xl font-semibold mb-4 sm:mb-6 ${isDarkMode ? 'text-white' : 'text-gray-900'}`}>진행 중인 스터디</h2>
             <button 
-                  onClick={() => openAddStudyModal()}
+                  // onClick={() => openAddStudyModal()}
                   className={`transition-colors font-medium text-base ${
                     isDarkMode ? 'text-gray-300 hover:text-white' : 'text-gray-600 hover:text-gray-900'
                   }`}
@@ -93,7 +139,7 @@ export default function StudySection({ studies }: { studies: Study[] }) {
                       ? 'border-gray-700 hover:border-blue-600 hover:bg-blue-900/20' 
                       : 'border-gray-200 hover:border-blue-300 hover:bg-blue-50/50'
                   }`}
-                  onClick={() => openStudyDetailPopup(study.id)}
+                  // onClick={() => openStudyDetailPopup(study.id)}
                 >
                   <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 sm:gap-0">
                     <div className="flex items-center space-x-3 sm:space-x-4">
@@ -114,7 +160,8 @@ export default function StudySection({ studies }: { studies: Study[] }) {
                       <button 
                         onClick={(e) => {
                           e.stopPropagation();
-                          handleAttendance(study.id.toString(), 'attend');
+                          handleAttendance(study.id, 'attend');
+                          handleJoin(study.id);
                         }}
                         className={`px-4 py-2 text-xs sm:px-3 sm:py-1 rounded-full border transition-colors ${
                           userSelections[study.id] === 'attend'

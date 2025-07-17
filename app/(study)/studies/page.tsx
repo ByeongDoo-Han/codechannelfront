@@ -1,7 +1,7 @@
 import React, {useState, useEffect, Suspense} from "react";
 import axios from "axios";
-import Section from "../../../components/StudySection";
 import Loading from "../../loading";
+import StudySection from "../../../components/StudySection";
 
 interface Study {
     id: number;
@@ -24,11 +24,9 @@ const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
 
 
 export default async function Studies() {
-
     return (
         <div>
             <Suspense fallback={<Loading />}>
-                <Section studies={[]} />
             </Suspense>
         </div>
     );

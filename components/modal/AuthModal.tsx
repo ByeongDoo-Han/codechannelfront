@@ -2,33 +2,25 @@
 
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
-import { useAuth } from '../../app/context/AuthContext';
+import useAuth from '../../app/context/AuthContext';
 import { useRouter } from 'next/navigation';
+import useStudy from '../../app/context/StudyContext';
 
 export default function AuthModals() {
-  const { 
-    isLoggedIn,
-    login,
-    logout,
-    isLoginModalOpen, 
-    isSignupModalOpen,
-    isForgotPasswordModalOpen,
-    openLoginModal, 
-    closeLoginModal, 
-    openSignupModal, 
-    closeSignupModal,
-    openForgotPasswordModal,
-    closeForgotPasswordModal
-  } = useAuth();
+  // const { 
+  //   isLoggedIn,
+  //   login,
+  //   logout,
+  //   joinedStudies,
+  //   openLoginModal,
+  //   openSignupModal,
+  //   closeLoginModal,
+  //   closeSignupModal,
+  // } = useAuth();
 
   // Hydration-safe 상태 관리
   const [isClient, setIsClient] = useState(false);
   const [isDarkMode, setIsDarkMode] = useState(false);
-  
-  // 클라이언트에서만 실행되도록 보장
-  useEffect(() => {
-    setIsClient(true);
-  }, []);
 
   // 로그인 폼 상태 관리
   const [loginForm, setLoginForm] = useState({
@@ -73,25 +65,25 @@ export default function AuthModals() {
   }, [isClient]);
 
   // URL 해시 감지
-  useEffect(() => {
-    if (!isClient) return;
+  // useEffect(() => {
+  //   if (!isClient) return;
     
-    const handleHashChange = () => {
-      const hash = window.location.hash;
-      if (hash === '#login') {
-        openLoginModal();
-      } else if (hash === '#signup') {
-        openSignupModal();
-      } else if (hash === '#forgot-password') {
-        openForgotPasswordModal();
-      }
-    };
+  //   const handleHashChange = () => {
+  //     const hash = window.location.hash;
+  //     if (hash === '#login') {
+  //       openLoginModal();
+  //     } else if (hash === '#signup') {
+  //       openSignupModal();
+  //     } else if (hash === '#forgot-password') {
+  //       openForgotPasswordModal();
+  //     }
+  //   };
 
-    handleHashChange();
-    window.addEventListener('hashchange', handleHashChange);
-    return () => window.removeEventListener('hashchange', handleHashChange);
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [isClient]);
+  //   handleHashChange();
+  //   window.addEventListener('hashchange', handleHashChange);
+  //   return () => window.removeEventListener('hashchange', handleHashChange);
+  // // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, [isClient]);
 
   // 로그인 폼 핸들러
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -122,6 +114,11 @@ export default function AuthModals() {
     .catch((error) => {
       console.error('로그인 실패:', error);
     });
+  };
+
+   // 다크모드 토글
+   const toggleDarkMode = () => {
+    setIsDarkMode(!isDarkMode);
   };
 
   // 회원가입 폼 핸들러
@@ -161,17 +158,14 @@ export default function AuthModals() {
 
   // 모달 닫기 핸들러
   const handleCloseLogin = () => {
-    closeLoginModal();
     setLoginForm({ email: '', password: '' });
   };
 
   const handleCloseSignup = () => {
-    closeSignupModal();
     setSignupForm({ name: '', email: '', password: '', confirmPassword: '' });
   };
 
   const handleCloseForgotPassword = () => {
-    closeForgotPasswordModal();
     setForgotPasswordForm({ email: '' });
     setForgotPasswordStep(1);
   };
@@ -278,7 +272,7 @@ export default function AuthModals() {
                 </label>
                 <button
                   type="button"
-                  onClick={openForgotPasswordModal}
+                  // onClick={openForgotPasswordModal}
                   className={`text-sm font-medium transition-colors ${
                     isDarkMode ? 'text-blue-400 hover:text-blue-300' : 'text-blue-600 hover:text-blue-800'
                   }`}

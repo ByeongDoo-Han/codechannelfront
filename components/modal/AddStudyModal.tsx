@@ -7,12 +7,14 @@ interface StudyModalProps {
   isStudyModalOpen: boolean;
   closeAddStudyModal: () => void;
   isDarkMode: boolean;
+  handleAddStudy: () => void;
 }
 
 export default function AddStudyModal({
   isStudyModalOpen,
   closeAddStudyModal,
   isDarkMode,
+  handleAddStudy,
 }: StudyModalProps) {
   const [studyForm, setStudyForm] = React.useState({
     name: '',

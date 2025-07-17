@@ -1,15 +1,17 @@
-
 "use client";
 import React, { useState } from "react";
 import { useDarkMode } from "../app/context/DarkModeContext";
-import { useAuth } from "../app/context/AuthContext";
+import useAuth from "../app/context/AuthContext";
 import DarkModeButton from "./DarkModeButton";
+import AuthModals from "./modal/AuthModal";
 
 export default function Navigation() {
     const { isDarkMode, toggleDarkMode } = useDarkMode();
-    const { isLoggedIn, login, logout, openLoginModal, openSignupModal } = useAuth();
+    const { isLoggedIn, openLoginModal, openSignupModal, closeLoginModal, closeSignupModal, login, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+
     return (
+        <>
         <nav className="flex justify-between items-center">
                 {/* Logo */}
                 <div className="flex items-center">
@@ -189,5 +191,6 @@ export default function Navigation() {
                 </div>
             )}
         </nav>
+    </>
     );
 }

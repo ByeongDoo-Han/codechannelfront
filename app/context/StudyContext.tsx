@@ -1,6 +1,12 @@
 "use client";
 import { createContext, useContext } from 'react';
 
+type UserSelections = {
+    [studyId: string]: 'attend' | 'unattend' | null;
+}
+
+export type UserSelectionsMap = Record<number, UserSelections>;
+
 export interface Study   {
   id: number;
   name: string;
@@ -19,12 +25,15 @@ export interface Study   {
 
 export interface StudyContextType {
   studies: Study[];
-  selectedStudy: number | null;
+  // selectedStudy: number | null;
+  userSelections: UserSelectionsMap;
+  isDarkMode: boolean;
   setSelectedStudy: (id: number) => void;
   updateStudy: (id: number, data: Partial<Study>) => void;
   addStudy: (data: Study) => void;
   removeStudy: (id: number) => void;
   openStudyDetailPopup: (studyId: number) => void;
+  handleAttendance: (studyId: string, action: 'attend' | 'unattend') => void;
 }
 
 export const StudyContext = createContext<StudyContextType | undefined>(undefined);

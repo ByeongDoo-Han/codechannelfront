@@ -6,17 +6,13 @@ interface AuthContextType {
     login: (token: string) => void;
     logout: () => void;
     joinedStudies: number[];
+    getToken: () => string | null;
     isLoginModalOpen: boolean;
     isSignupModalOpen: boolean;
     openLoginModal: () => void;
-    closeLoginModal: () => void;
     openSignupModal: () => void;
+    closeLoginModal: () => void;
     closeSignupModal: () => void;
-    closeForgotPasswordModal: () => void;
-    openForgotPasswordModal: () => void;
-    openAddStudyModal: () => void;
-    closeAddStudyModal: () => void;
-    getToken: () => string | null;
   }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -24,20 +20,16 @@ export const AuthContext = createContext<AuthContextType>({
     logout: () => {},
     isLoggedIn: false,
     getToken: () => null,
-    openLoginModal: () => {},
-    openSignupModal: () => {},
     joinedStudies: [],
     isLoginModalOpen: false,
-    isSignupModalOpen: false,   
+    isSignupModalOpen: false,
+    openLoginModal: () => {},
+    openSignupModal: () => {},
     closeLoginModal: () => {},
     closeSignupModal: () => {},
-    closeForgotPasswordModal: () => {},
-    openForgotPasswordModal: () => {},
-    openAddStudyModal: () => {},
-    closeAddStudyModal: () => {},
 });
 
-export const useAuth = () => {
+export default function useAuth() {
     const context = useContext(AuthContext);
     if (context === undefined) {
         throw new Error('useAuth must be used within an AuthProvider');

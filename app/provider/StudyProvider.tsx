@@ -1,12 +1,16 @@
 'use client';
 
 import axios from 'axios';
-import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
-import { StudyContextType, StudyContext, Study } from '../context/StudyContext';
+import React, { useState, ReactNode } from 'react';
+import { StudyContext, Study } from '../context/StudyContext';
+import { useDarkMode } from '../context/DarkModeContext';
+import { UserSelectionsMap } from '../context/StudyContext';
 
 export default function StudyProvider({ children }: { children: ReactNode }) {
   const [studies, setStudies] = useState<Study[]>([]);
   const [selectedStudy, setSelectedStudy] = useState<number>(0);
+  const [userSelections, setUserSelections] = useState<UserSelectionsMap>({});
+  const { isDarkMode } = useDarkMode();
 
   const updateStudy = (id: number, data: Partial<Study>) => {
     setStudies(prev => prev.map(study => 
@@ -25,15 +29,24 @@ export default function StudyProvider({ children }: { children: ReactNode }) {
   const openStudyDetailPopup = (studyId: number) => {
     setSelectedStudy(studyId);
   };
+  const handleAttendance = (studyId: string, action: 'attend' | 'unattend') => {
+    setUserSelections(prev => ({
+      ...prev,
+      [studyId]: action,
+    }));
+  };
 
-  const value: StudyContextType = {
+  const value = {
     studies,
     selectedStudy,
+    userSelections,
+    isDarkMode,
     setSelectedStudy,
     updateStudy,
     addStudy,
     removeStudy,
     openStudyDetailPopup,
+    handleAttendance,
   }
 
   return (

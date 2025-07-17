@@ -5,6 +5,8 @@ import DarkModeProvider from "./provider/DarkModeProvider";
 import AuthProvider from "./provider/AuthProvider";
 import StudyProvider from "./provider/StudyProvider";
 import { Geist, Geist_Mono } from "next/font/google";
+import AuthModals from "../components/modal/AuthModal";
+import AddStudyModal from "../components/modal/AddStudyModal";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -40,6 +42,7 @@ export default function RootLayout({
             <StudyProvider>
               <Navigation />
               {children}
+              {/* <AuthModals /> */}
             </StudyProvider>
           </DarkModeProvider>
         </AuthProvider>
