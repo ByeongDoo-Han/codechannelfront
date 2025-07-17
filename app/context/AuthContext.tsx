@@ -13,6 +13,9 @@ interface AuthContextType {
     openSignupModal: () => void;
     closeLoginModal: () => void;
     closeSignupModal: () => void;
+    openForgotPasswordModal: () => void;
+    closeForgotPasswordModal: () => void;
+    isForgotPasswordModalOpen: boolean;
   }
 
 export const AuthContext = createContext<AuthContextType>({
@@ -27,6 +30,9 @@ export const AuthContext = createContext<AuthContextType>({
     openSignupModal: () => {},
     closeLoginModal: () => {},
     closeSignupModal: () => {},
+    openForgotPasswordModal: () => {},
+    closeForgotPasswordModal: () => {},
+    isForgotPasswordModalOpen: false,
 });
 
 export default function useAuth() {

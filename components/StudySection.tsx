@@ -22,9 +22,6 @@ interface StudySectionProps {
   handleAttendance: (id: string, action: 'attend' | 'unattend') => void;
 }
 
-// const {isLoggedIn, logout, joinedStudies } = useAuth();
-const {studies, updateStudy, userSelections} = useStudy();
-
 const handleJoin = async(id: number) => {
   const accessToken = localStorage.getItem('accessToken');
   console.log('요청 id:', id);
@@ -76,12 +73,14 @@ export default function StudySection({ studies, userSelections, isDarkMode }: St
     const [isStudyDetailPopupOpen, setIsStudyDetailPopupOpen] = useState(false);
     const [popupStudyId, setPopupStudyId] = useState<number | null>(null);
     const [selectedStudy, setSelectedStudy] = useState<number | null>(null);
-    
+    const {isLoggedIn, logout, joinedStudies } = useAuth();
+    const {updateStudy} = useStudy();
+
     //참석/불참석처리
     const handleAttendance = (studyId: number, action: 'attend' | 'unattend') => {
       const study = studies.find(s => s.id === Number(studyId));
       if (!study) return;
-  
+
       const currentSelection = userSelections[studyId];
       let newSelection: 'attend' | 'unattend' | null = null;
       let newCount = study.participantCount;

@@ -38,7 +38,6 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       localStorage.setItem('accessToken', token);
       await fetchJoinedStudies();
     };
-  
     const logout = () => {
       localStorage.removeItem('accessToken');
       setIsLoggedIn(false);
@@ -46,9 +45,18 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       setIsSignupModalOpen(false);
       setJoinedStudies([]);
     };
-  
-    const openLoginModal = () => setIsLoginModalOpen(true);
-    const openSignupModal = () => setIsSignupModalOpen(true);
+
+    const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
+    const openForgotPasswordModal = () => setIsForgotPasswordModalOpen(true);
+    const closeForgotPasswordModal = () => setIsForgotPasswordModalOpen(false);
+    const openLoginModal = () => {
+      setIsLoginModalOpen(true);
+      setIsSignupModalOpen(false);
+    }
+    const openSignupModal = () => {
+      setIsSignupModalOpen(true);
+      setIsLoginModalOpen(false);
+    }
     const closeLoginModal = () => setIsLoginModalOpen(false);
     const closeSignupModal = () => setIsSignupModalOpen(false);
   
@@ -74,6 +82,9 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       setSelectedDate,
       setSelectedStudyId,
       setSelectedProjectId,
+      openForgotPasswordModal,
+      closeForgotPasswordModal,
+      isForgotPasswordModalOpen,
     };
   
     return (  

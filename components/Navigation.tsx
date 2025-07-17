@@ -7,11 +7,10 @@ import AuthModals from "./modal/AuthModal";
 
 export default function Navigation() {
     const { isDarkMode, toggleDarkMode } = useDarkMode();
-    const { isLoggedIn, openLoginModal, openSignupModal, closeLoginModal, closeSignupModal, login, logout } = useAuth();
+    const { isLoggedIn, openLoginModal, openSignupModal, logout } = useAuth();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
     return (
-        <>
         <nav className="flex justify-between items-center">
                 {/* Logo */}
                 <div className="flex items-center">
@@ -191,6 +190,5 @@ export default function Navigation() {
                 </div>
             )}
         </nav>
-    </>
     );
 }

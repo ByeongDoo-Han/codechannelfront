@@ -7,16 +7,21 @@ import { useRouter } from 'next/navigation';
 import useStudy from '../../app/context/StudyContext';
 
 export default function AuthModals() {
-  // const { 
-  //   isLoggedIn,
-  //   login,
-  //   logout,
-  //   joinedStudies,
-  //   openLoginModal,
-  //   openSignupModal,
-  //   closeLoginModal,
-  //   closeSignupModal,
-  // } = useAuth();
+  const { 
+    isLoggedIn,
+    login,
+    logout,
+    joinedStudies,
+    openLoginModal,
+    openSignupModal,
+    closeLoginModal,
+    closeSignupModal,
+    isLoginModalOpen,
+    isSignupModalOpen,
+    openForgotPasswordModal,
+    closeForgotPasswordModal,
+    isForgotPasswordModalOpen,
+  } = useAuth();
 
   // Hydration-safe 상태 관리
   const [isClient, setIsClient] = useState(false);
@@ -65,25 +70,23 @@ export default function AuthModals() {
   }, [isClient]);
 
   // URL 해시 감지
-  // useEffect(() => {
-  //   if (!isClient) return;
+  useEffect(() => {
+    if (!isClient) return;
     
-  //   const handleHashChange = () => {
-  //     const hash = window.location.hash;
-  //     if (hash === '#login') {
-  //       openLoginModal();
-  //     } else if (hash === '#signup') {
-  //       openSignupModal();
-  //     } else if (hash === '#forgot-password') {
-  //       openForgotPasswordModal();
-  //     }
-  //   };
+    const handleHashChange = () => {
+      const hash = window.location.hash;
+      if (hash === '#login') {
+        openLoginModal();
+      } else if (hash === '#signup') {
+        openSignupModal();
+      }
+    };
 
-  //   handleHashChange();
-  //   window.addEventListener('hashchange', handleHashChange);
-  //   return () => window.removeEventListener('hashchange', handleHashChange);
-  // // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [isClient]);
+    handleHashChange();
+    window.addEventListener('hashchange', handleHashChange);
+    return () => window.removeEventListener('hashchange', handleHashChange);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [isClient]);
 
   // 로그인 폼 핸들러
   const handleLoginSubmit = async (e: React.FormEvent) => {
@@ -173,7 +176,6 @@ export default function AuthModals() {
   const handleLogout = () => {
     logout();
   };
-
 
   // 비밀번호 찾기 폼 핸들러
   const handleForgotPasswordSubmit = (e: React.FormEvent) => {

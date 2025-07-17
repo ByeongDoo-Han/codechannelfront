@@ -8,6 +8,7 @@ import AddStudyModal from "../../components/modal/AddStudyModal";
 import useAuth from "../context/AuthContext";
 import axios from "axios";
 import useStudy from "../context/StudyContext";
+import AuthModals from "../../components/modal/AuthModal";
 
 export default function Content({ studies }: { studies: Study[] }) {
     const { isDarkMode } = useDarkMode();
@@ -156,11 +157,12 @@ const handleAttendance = (studyId: string, action: 'attend' | 'unattend') => {
                                 // openStudyDetailPopup={openStudyDetailPopup}
                             />
                             <AddStudyModal
-                            isStudyModalOpen={isAddStudyModalOpen}
-                            closeAddStudyModal={closeAddStudyModal}
-                            isDarkMode={isDarkMode}
-                            handleAddStudy={handleAddStudy}
+                              isStudyModalOpen={isAddStudyModalOpen}
+                              closeAddStudyModal={closeAddStudyModal}
+                              isDarkMode={isDarkMode}
+                              handleAddStudy={handleAddStudy}
                             />
+                            <AuthModals />
                         </div>
                     </div>
                 </main>
