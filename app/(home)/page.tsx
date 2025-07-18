@@ -10,7 +10,6 @@ export default async function Home() {
     const studies = await fetchStudies();
 
     return (
-        <Content studies={studies} />
-        
+        <Content studies={studies}/>
     );
 }

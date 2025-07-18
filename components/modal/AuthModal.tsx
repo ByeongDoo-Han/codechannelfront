@@ -162,10 +162,12 @@ export default function AuthModals() {
   // 모달 닫기 핸들러
   const handleCloseLogin = () => {
     setLoginForm({ email: '', password: '' });
+    closeLoginModal();
   };
 
   const handleCloseSignup = () => {
     setSignupForm({ name: '', email: '', password: '', confirmPassword: '' });
+    closeSignupModal();
   };
 
   const handleCloseForgotPassword = () => {

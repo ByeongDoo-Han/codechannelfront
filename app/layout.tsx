@@ -41,8 +41,6 @@ export default function RootLayout({
         <AuthProvider>
           <DarkModeProvider>
             <StudyProvider>
-              {/* <Header /> */}
-              <Navigation />
               {children}
             </StudyProvider>
           </DarkModeProvider>
