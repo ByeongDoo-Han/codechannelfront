@@ -1,5 +1,6 @@
 "use client";
 import { createContext, useContext } from 'react';
+import useAuth from "./AuthContext";
 
 type UserSelections = {
     [studyId: string]: 'attend' | 'unattend' | null;
@@ -25,8 +26,9 @@ export interface Study   {
 
 export interface StudyContextType {
   studies: Study[];
+  joinedStudies: number[];
   // selectedStudy: number | null;
-  userSelections: UserSelectionsMap;
+  userSelections: string;
   isDarkMode: boolean;
   setSelectedStudy: (id: number) => void;
   updateStudy: (id: number, data: Partial<Study>) => void;

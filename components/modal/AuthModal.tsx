@@ -100,7 +100,7 @@ export default function AuthModals() {
 
   const router = useRouter();
 
-  
+
   const handleLogin = async () => {
     await axios.post('http://localhost:8080/api/v1/auth/login', {
       email: loginForm.email,

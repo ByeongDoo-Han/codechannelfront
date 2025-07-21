@@ -1,17 +1,41 @@
 'use client';
 
 import axios from 'axios';
-import React, { useState, ReactNode } from 'react';
+import React, { useState, ReactNode, useEffect } from 'react';
 import { StudyContext, Study } from '../context/StudyContext';
 import { useDarkMode } from '../context/DarkModeContext';
-import { UserSelectionsMap } from '../context/StudyContext';
+import useAuth from "../context/AuthContext";
 
 export default function StudyProvider({ children }: { children: ReactNode }) {
   const [studies, setStudies] = useState<Study[]>([]);
-  const [selectedStudy, setSelectedStudy] = useState<number>(0);
-  const [userSelections, setUserSelections] = useState<UserSelectionsMap>({});
+  const [selectedStudy, setSelectedStudy] = useState<number | null>(null);
+  const [userSelections, setUserSelections] = useState<string>("");
   const { isDarkMode } = useDarkMode();
+  const { isLoggedIn, joinedStudies, setJoinedStudies } = useAuth();
 
+  useEffect(() => {
+    const fetchStudies = async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token || !isLoggedIn) return;
+
+      try {
+        const response = await axios.get('http://localhost:8080/api/v1/join/studies', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+
+        setJoinedStudies(response.data);
+        console.log(response.data)
+      } catch (error) {
+        console.error('스터디 목록 불러오기 실패:', error);
+      }
+    };
+
+    fetchStudies();
+  }, [isLoggedIn]); // 로그인 상태 바뀌면 다시 fetch
+  
   const updateStudy = (id: number, data: Partial<Study>) => {
     setStudies(prev => prev.map(study => 
       study.id === id ? { ...study, ...data } : study
@@ -30,15 +54,13 @@ export default function StudyProvider({ children }: { children: ReactNode }) {
     setSelectedStudy(studyId);
   };
   const handleAttendance = (studyId: string, action: 'attend' | 'unattend') => {
-    setUserSelections(prev => ({
-      ...prev,
-      [studyId]: action,
-    }));
+    setUserSelections(action);
   };
 
   const value = {
     studies,
-    selectedStudy,
+    isLoggedIn,
+    joinedStudies,
     userSelections,
     isDarkMode,
     setSelectedStudy,
