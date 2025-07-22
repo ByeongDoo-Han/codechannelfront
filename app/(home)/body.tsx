@@ -24,68 +24,61 @@ export default function Body({ studies }: { studies: Study[] }) {
     const [isCalendarPopupOpen, setIsCalendarPopupOpen] = useState(false);
     const [selectedDate, setSelectedDate] = useState<Date | null>(null);
     const [userSelections, setUserSelections] = useState<{[studyId: string]: 'attend' | 'unattend' | null}>({});
-    const {isLoggedIn, logout, joinedStudies } = useAuth();
+    const {isLoggedIn, logout, joinedStudies, setJoinedStudies } = useAuth();
     const { updateStudy, setSelectedStudy } = useStudy();
-// 참석/불참석 처리 (on/off 방식)
-const handleAttendance = (studyId: string, action: 'attend' | 'unattend') => {
-    const study = studies.find(s => s.id === Number(studyId));
-    if (!study) return;
+  // 참석/불참석 처리 (on/off 방식)
+    const handleAttendance = (studyId: string, action: 'attend' | 'unattend') => {
+      const study = studies.find(s => s.id === Number(studyId));
+      if (!study) return;
 
-    const currentSelection = userSelections[studyId];
-    let newSelection: 'attend' | 'unattend' | null = null;
-    let newCount = study.participantCount;
+      const currentSelection = userSelections[studyId];
+      let newSelection: 'attend' | 'unattend' | null = null;
+      let newCount = study.participantCount;
 
-    if (currentSelection === action) {
-      // 같은 버튼을 다시 누르면 선택 해제 (off)
-      newSelection = null;
-      if (action === 'attend') {
-        newCount = Math.max(study.participantCount - 1, 0);
-        handleUnjoin(Number(study.id));
-      }
-    } else {
-      // 다른 버튼을 누르거나 처음 누르는 경우 (on)
-      newSelection = action;
-      if (action === 'attend') {
-        if (currentSelection !== 'unattend') {
-          newCount = Math.min(study.participantCount + 1, study.maxParticipants || 50);
-        }
-        handleJoin(Number(study.id));
-      } else { // action === 'unattend'
-        if (currentSelection === 'attend') {
+      if (currentSelection === action) {
+        // 같은 버튼을 다시 누르면 선택 해제 (off)
+        newSelection = null;
+        if (action === 'attend') {
           newCount = Math.max(study.participantCount - 1, 0);
+          handleUnjoin(Number(study.id));
         }
-        handleUnjoin(Number(study.id));
+      } else {
+        // 다른 버튼을 누르거나 처음 누르는 경우 (on)
+        newSelection = action;
+        if (action === 'attend') {
+          if (currentSelection !== 'unattend') {
+            newCount = Math.min(study.participantCount + 1, study.maxParticipants || 50);
+          }
+          handleJoin(Number(study.id));
+        } else { // action === 'unattend'
+          if (currentSelection === 'attend') {
+            newCount = Math.max(study.participantCount - 1, 0);
+          }
+          handleUnjoin(Number(study.id));
+        }
       }
-    }
 
-    // 사용자 선택 상태 업데이트
-    setUserSelections(prev => ({
-      ...prev,
-      [studyId]: newSelection
-    }));
+      // 사용자 선택 상태 업데이트
+      setUserSelections(prev => ({
+        ...prev,
+        [studyId]: newSelection
+      }));
 
-    updateStudy(Number(studyId), { participantCount: newCount });
-  };
+      updateStudy(Number(studyId), { participantCount: newCount });
+    };
     // 클라이언트에서만 실행되도록 보장
     useEffect(() => {
     setIsClient(true);
-    if (isLoggedIn && joinedStudies.length > 0) {
+    if (isLoggedIn) {
         const initialSelections: {[studyId: string]: 'attend' | 'unattend' | null} = {};
-        console.log('joinedStudies', joinedStudies);
-        joinedStudies.forEach(studyId => {
-            initialSelections[studyId] = 'attend';
-        });
-        console.log('initialSelections', initialSelections);
         setUserSelections(initialSelections);
         }
     }, []);
-
+    
+  
     useEffect(() => {
-    if (isLoggedIn && joinedStudies.length > 0) {
+    if (isLoggedIn) {
         const newSelections: { [studyId: string]: 'attend' | 'unattend' | null } = {};
-        joinedStudies.forEach(studyId => {
-        newSelections[studyId] = 'attend';
-        });
         setUserSelections(newSelections);
     }
     }, []);
@@ -147,6 +140,7 @@ const handleAttendance = (studyId: string, action: 'attend' | 'unattend') => {
                         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
                             <StudySection 
                                 studies={studies}
+                                joinedStudies={joinedStudies}
                                 userSelections={userSelections}
                                 isDarkMode={isDarkMode}
                                 openAddStudyModal={openAddStudyModal}

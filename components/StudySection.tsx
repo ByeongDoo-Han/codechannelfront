@@ -16,23 +16,21 @@ interface StudySectionProps {
   selectedStudyId?: number | null;
   userSelections: Record<string, 'attend' | 'unattend' | null>;
   isDarkMode: boolean;
-
   openAddStudyModal: () => void;
   openStudyDetailPopup?: (id: number) => void;
   setSelectedStudy: (id: number) => void;
-  handleAttendance: (id: string, action: 'attend' | 'unattend') => void;
+  handleAttendance: (id: number, action: 'attend' | 'unattend') => void;
 }
 
 
 
-export default function StudySection({ studies, userSelections, isDarkMode }: StudySectionProps) {
+export default function StudySection({studies, isDarkMode, handleAttendance }: StudySectionProps) {
     const [isAddStudyModalOpen, setIsAddStudyModalOpen] = useState(false);
     const [isStudyDetailPopupOpen, setIsStudyDetailPopupOpen] = useState(false);
     const [popupStudyId, setPopupStudyId] = useState<number | null>(null);
     const [selectedStudy, setSelectedStudy] = useState<number | null>(null);
     const {isLoggedIn, logout } = useAuth();
-    const { joinedStudies } = useStudy();
-
+    const [userSelections, setUserSelections] = useState<{[studyId: string]: 'attend' | 'unattend' | null}>({});
     //참석/불참석처리
     
     
@@ -56,10 +54,11 @@ export default function StudySection({ studies, userSelections, isDarkMode }: St
             
             <div className="space-y-3 sm:space-y-4">
               {studies.map((study: Study) => (
+                
                 <StudyCard
                   key={study.id}
                   study={study}
-                  userSelections={userSelections[study.id.toString()] || 'attend'}
+                  handleAttendance={handleAttendance}
                 />
               ))}
             </div>

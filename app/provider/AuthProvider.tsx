@@ -1,8 +1,7 @@
 "use client";
 import { AuthContext } from "../context/AuthContext";
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
-import useAuth from "../context/AuthContext";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -11,42 +10,93 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     const [selectedProjectId, setSelectedProjectId] = useState<string | null>(null);
     const [isLoginModalOpen, setIsLoginModalOpen] = useState(false);
     const [isSignupModalOpen, setIsSignupModalOpen] = useState(false);
-    const { joinedStudies } = useAuth();
-    
+    const [joinedStudies, setJoinedStudies] = useState<number[]>([]);
+
+    useEffect(() => {
+      const token = localStorage.getItem('accessToken');
+      if (token) {
+        setIsLoggedIn(true);
+      }
+    }, []);
+
     const getToken = () => localStorage.getItem('accessToken');
     
-    const login = async (token: string) => {
+    const login = useCallback(async (token: string) => {
       localStorage.setItem('accessToken', token);
       setIsLoggedIn(true);
+    }, []);
 
-    };
-
-    const logout = () => {
+    const logout = useCallback(() => {
       localStorage.removeItem('accessToken');
+      setJoinedStudies([]);
       setIsLoggedIn(false);
       setIsLoginModalOpen(false);
       setIsSignupModalOpen(false);
-    };
+    }, []);
 
     const [isForgotPasswordModalOpen, setIsForgotPasswordModalOpen] = useState(false);
-    const openForgotPasswordModal = () => setIsForgotPasswordModalOpen(true);
-    const closeForgotPasswordModal = () => setIsForgotPasswordModalOpen(false);
-    const openLoginModal = () => {
+    const openForgotPasswordModal = useCallback(() => setIsForgotPasswordModalOpen(true), []);
+    const closeForgotPasswordModal = useCallback(() => setIsForgotPasswordModalOpen(false), []);
+    const openLoginModal = useCallback(() => {
       setIsLoginModalOpen(true);
       setIsSignupModalOpen(false);
-    }
-    const openSignupModal = () => {
+    }, []);
+    const openSignupModal = useCallback(() => {
       setIsSignupModalOpen(true);
       setIsLoginModalOpen(false);
-    }
-    const closeLoginModal = () => setIsLoginModalOpen(false);
-    const closeSignupModal = () => setIsSignupModalOpen(false);
+    }, []);
+    const closeLoginModal = useCallback(() => setIsLoginModalOpen(false), []);
+    const closeSignupModal = useCallback(() => setIsSignupModalOpen(false), []);
   
+    const fetchJoinedStudies = useCallback(async () => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) return;
+    
+      try {
+        const response = await axios.get('http://localhost:8080/api/v1/join/studies', {
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+          withCredentials: true,
+        });
+    
+        setJoinedStudies(response.data.map((study: any) => study.groupId));
+        console.log(response.data)
+      } catch (error) {
+        console.error('스터디 목록 불러오기 실패:', error);
+      }
+    }, []);
+
+    const handleJoinStudy = useCallback(async (studyId: number) => {
+      const token = localStorage.getItem('accessToken');
+      if (!token) {
+        openLoginModal();
+        return;
+      }
+
+      try {
+        await axios.post(`http://localhost:8080/api/v1/join/${studyId}`,
+          {},
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+            withCredentials: true,
+          }
+        );
+        fetchJoinedStudies();
+      } catch (error) {
+        console.error('스터디 참여 실패:', error);
+      }
+    }, [fetchJoinedStudies, openLoginModal]);
+    
     const value = {
       login,
       logout,
       getToken,
       isLoggedIn,
+      joinedStudies,
+      setJoinedStudies,
       setIsLoggedIn,
       isLoginModalOpen,
       isSignupModalOpen,
@@ -60,9 +110,11 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       setSelectedDate,
       setSelectedStudyId,
       setSelectedProjectId,
+      fetchJoinedStudies,
       openForgotPasswordModal,
       closeForgotPasswordModal,
       isForgotPasswordModalOpen,
+      handleJoinStudy,
     };
   
     return (  

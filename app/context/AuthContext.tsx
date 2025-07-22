@@ -5,7 +5,10 @@ interface AuthContextType {
     isLoggedIn: boolean;
     login: (token: string) => void;
     logout: () => void;
+    fetchJoinedStudies: () => void;
     joinedStudies: number[];
+    setJoinedStudies: (studies: number[]) => void;
+    setIsLoggedIn: (isLoggedIn: boolean) => void;
     getToken: () => string | null;
     isLoginModalOpen: boolean;
     isSignupModalOpen: boolean;
@@ -13,6 +16,7 @@ interface AuthContextType {
     openSignupModal: () => void;
     closeLoginModal: () => void;
     closeSignupModal: () => void;
+    handleJoinStudy: (studyId: number) => void;
     openForgotPasswordModal: () => void;
     closeForgotPasswordModal: () => void;
     isForgotPasswordModalOpen: boolean;
@@ -22,14 +26,18 @@ export const AuthContext = createContext<AuthContextType>({
     login: () => {},
     logout: () => {},
     isLoggedIn: false,
-    getToken: () => null,
+    fetchJoinedStudies: () => {},
     joinedStudies: [],
+    setJoinedStudies: () => {},
+    setIsLoggedIn: () => {},
+    getToken: () => null,
     isLoginModalOpen: false,
     isSignupModalOpen: false,
     openLoginModal: () => {},
     openSignupModal: () => {},
     closeLoginModal: () => {},
     closeSignupModal: () => {},
+    handleJoinStudy: (studyId: number) => {},
     openForgotPasswordModal: () => {},
     closeForgotPasswordModal: () => {},
     isForgotPasswordModalOpen: false,

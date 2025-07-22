@@ -11,7 +11,6 @@ export default function AuthModals() {
     isLoggedIn,
     login,
     logout,
-    joinedStudies,
     openLoginModal,
     openSignupModal,
     closeLoginModal,

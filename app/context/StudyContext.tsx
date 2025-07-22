@@ -26,7 +26,6 @@ export interface Study   {
 
 export interface StudyContextType {
   studies: Study[];
-  joinedStudies: number[];
   // selectedStudy: number | null;
   userSelections: string;
   isDarkMode: boolean;
