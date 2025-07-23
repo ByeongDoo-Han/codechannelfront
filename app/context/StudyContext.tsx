@@ -27,7 +27,7 @@ export interface Study   {
 export interface StudyContextType {
   studies: Study[];
   // selectedStudy: number | null;
-  userSelections: string;
+  userSelections: UserSelections;
   isDarkMode: boolean;
   setSelectedStudy: (id: number) => void;
   updateStudy: (id: number, data: Partial<Study>) => void;

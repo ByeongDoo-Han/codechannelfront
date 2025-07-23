@@ -12,6 +12,7 @@ export default function StudyProvider({ children }: { children: ReactNode }) {
   const [selectedStudy, setSelectedStudy] = useState<number | null>(null);
   const { isDarkMode } = useDarkMode();
   const { isLoggedIn, fetchJoinedStudies } = useAuth();
+  const [userSelections, setUserSelections] = useState<{[studyId: string]: 'attend' | 'unattend' | null}>({});
 
   useEffect(() => {
     if (isLoggedIn) {
@@ -45,6 +46,8 @@ export default function StudyProvider({ children }: { children: ReactNode }) {
     addStudy,
     removeStudy,
     openStudyDetailPopup,
+    userSelections,
+    handleAttendance,
   };
 
   return (
