@@ -34,7 +34,7 @@ export interface StudyContextType {
   addStudy: (data: Study) => void;
   removeStudy: (id: number) => void;
   openStudyDetailPopup: (studyId: number) => void;
-  handleAttendance: (studyId: string, action: 'attend' | 'unattend') => void;
+  // handleAttendance: (studyId: string, action: 'attend' | 'unattend') => void;
 }
 
 export const StudyContext = createContext<StudyContextType | undefined>(undefined);

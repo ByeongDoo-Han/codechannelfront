@@ -47,7 +47,6 @@ export default function StudyProvider({ children }: { children: ReactNode }) {
     removeStudy,
     openStudyDetailPopup,
     userSelections,
-    handleAttendance,
   };
 
   return (

@@ -16,6 +16,7 @@ interface StudySectionProps {
   selectedStudyId?: number | null;
   userSelections: Record<string, 'attend' | 'unattend' | null>;
   isDarkMode: boolean;
+  joinedStudies: number[];
   openAddStudyModal: () => void;
   openStudyDetailPopup?: (id: number) => void;
   setSelectedStudy: (id: number) => void;
@@ -24,7 +25,7 @@ interface StudySectionProps {
 
 
 
-export default function StudySection({studies, isDarkMode, handleAttendance }: StudySectionProps) {
+export default function StudySection({studies, joinedStudies, isDarkMode }: StudySectionProps) {
     const [isAddStudyModalOpen, setIsAddStudyModalOpen] = useState(false);
     const [isStudyDetailPopupOpen, setIsStudyDetailPopupOpen] = useState(false);
     const [popupStudyId, setPopupStudyId] = useState<number | null>(null);
@@ -53,14 +54,12 @@ export default function StudySection({studies, isDarkMode, handleAttendance }: S
             </div>
             
             <div className="space-y-3 sm:space-y-4">
-              {studies.map((study: Study) => (
-                
+              {studies.length!==0?studies.map((study: Study) => (
                 <StudyCard
                   key={study.id}
                   study={study}
-                  handleAttendance={handleAttendance}
                 />
-              ))}
+              )):<p>스터디가 없습니다.</p>}
             </div>
           </section>
     );

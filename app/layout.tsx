@@ -8,6 +8,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import AuthModals from "../components/modal/AuthModal";
 import AddStudyModal from "../components/modal/AddStudyModal";
 import Header from "@/components/Header";
+import ReactQueryProvider from "./provider/ReactQueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -38,6 +39,7 @@ export default function RootLayout({
         className={`${geistSans.variable} ${geistMono.variable}`}
         suppressHydrationWarning={true}
       >
+        <ReactQueryProvider>
         <AuthProvider>
           <DarkModeProvider>
             <StudyProvider>
@@ -45,6 +47,7 @@ export default function RootLayout({
             </StudyProvider>
           </DarkModeProvider>
         </AuthProvider>
+        </ReactQueryProvider>
       </body>
     </html>
   )

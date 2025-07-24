@@ -140,12 +140,12 @@ export default function Body({ studies }: { studies: Study[] }) {
                         <div className="lg:col-span-2 space-y-4 sm:space-y-6">
                             <StudySection 
                                 studies={studies}
-                                joinedStudies={joinedStudies}
+                                // joinedStudies={joinedStudies}
                                 userSelections={userSelections}
                                 isDarkMode={isDarkMode}
                                 openAddStudyModal={openAddStudyModal}
                                 setSelectedStudy={setSelectedStudy}
-                                handleAttendance={handleAttendance}
+                                // handleAttendance={handleAttendance}
                                 // openStudyDetailPopup={openStudyDetailPopup}
                             />
                             <AddStudyModal
