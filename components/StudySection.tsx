@@ -6,6 +6,7 @@ import useAuth from "../app/context/AuthContext";
 import useStudy from "../app/context/StudyContext";
 import StudyCard from "./StudyCard";
 import { Study } from "../app/context/StudyContext";
+import { useQuery } from "@tanstack/react-query";
 
 interface UserSelections {
   [studyId: string]: 'attend' | 'unattend' | null;
@@ -25,7 +26,7 @@ interface StudySectionProps {
 
 
 
-export default function StudySection({studies, joinedStudies, isDarkMode }: StudySectionProps) {
+export default function StudySection({isDarkMode }: StudySectionProps) {
     const [isAddStudyModalOpen, setIsAddStudyModalOpen] = useState(false);
     const [isStudyDetailPopupOpen, setIsStudyDetailPopupOpen] = useState(false);
     const [popupStudyId, setPopupStudyId] = useState<number | null>(null);
@@ -34,7 +35,18 @@ export default function StudySection({studies, joinedStudies, isDarkMode }: Stud
     const [userSelections, setUserSelections] = useState<{[studyId: string]: 'attend' | 'unattend' | null}>({});
     //참석/불참석처리
     
-    
+    const {data, isLoading, error} = useQuery({
+            queryKey: ['studies'],
+            queryFn: ()=>fetch("http://localhost:8080/api/v1/studies")
+            .then(response => response.json()),
+        });
+
+    const {data: joinedStudies, isLoading: joinedStudiesLoading, error: joinedStudiesError} = useQuery({
+            queryKey: ['studies'],
+            queryFn: ()=>fetch("http://localhost:8080/api/v1/join/studies")
+            .then(response => response.json()),
+        });
+        console.log(joinedStudies);
     return (
         <section className={`backdrop-blur-sm rounded-xl shadow-sm border p-4 sm:p-6 hover:shadow-md transition-all duration-300 ${
             isDarkMode 
@@ -54,7 +66,7 @@ export default function StudySection({studies, joinedStudies, isDarkMode }: Stud
             </div>
             
             <div className="space-y-3 sm:space-y-4">
-              {studies.length!==0?studies.map((study: Study) => (
+              {data?.length!==0?data?.map((study: Study) => (
                 <StudyCard
                   key={study.id}
                   study={study}

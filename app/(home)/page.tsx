@@ -10,6 +10,7 @@ export default async function Home() {
         return data;
     }
     const studies = await fetchStudies();
+    
 
     return (
         <ReactQueryProvider>

@@ -5,12 +5,12 @@ import axios from 'axios';
 import useAuth from '../../app/context/AuthContext';
 import { useRouter } from 'next/navigation';
 import useStudy from '../../app/context/StudyContext';
+import { useAuthStore } from '@/app/stores/useAuthStore';
 
 export default function AuthModals() {
+  const login = useAuthStore((state) => state.login);
   const { 
     isLoggedIn,
-    login,
-    logout,
     openLoginModal,
     openSignupModal,
     closeLoginModal,
@@ -109,9 +109,9 @@ export default function AuthModals() {
     })
     .then(
       (response) => {
-        localStorage.setItem('accessToken', response.data.accessToken);
+        // localStorage.setItem('accessToken', response.data.accessToken);
         router.push('/');
-        window.location.reload();
+        login(response.data.accessToken, response.data.user);
       }
     )
     .catch((error) => {
@@ -173,10 +173,6 @@ export default function AuthModals() {
   const handleCloseForgotPassword = () => {
     setForgotPasswordForm({ email: '' });
     setForgotPasswordStep(1);
-  };
-
-  const handleLogout = () => {
-    logout();
   };
 
   // 비밀번호 찾기 폼 핸들러
