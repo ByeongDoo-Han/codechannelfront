@@ -15,7 +15,7 @@ export const useAddStudyMutation = () => {
   return useMutation({
     mutationFn: async (studyData: AddStudyRequest) => {
       const response = await axios.post(
-        'http://localhost:8080/api/v1/studies',
+        'http://54.180.132.97:8080/api/v1/studies',
         studyData,
         {
           headers: {

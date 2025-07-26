@@ -5,7 +5,7 @@ import ReactQueryProvider from "../provider/ReactQueryProvider";
 export default async function Home() {
 
     async function fetchStudies() {
-        const response = await fetch("http://localhost:8080/api/v1/studies");
+        const response = await fetch("http://54.180.132.97:8080/api/v1/studies");
         const data = await response.json();
         return data;
     }

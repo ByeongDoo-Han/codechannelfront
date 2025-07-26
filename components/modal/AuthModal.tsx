@@ -101,7 +101,7 @@ export default function AuthModals() {
 
 
   const handleLogin = async () => {
-    await axios.post('http://localhost:8080/api/v1/auth/login', {
+    await axios.post('http://54.180.132.97:8080/api/v1/auth/login', {
       email: loginForm.email,
       password: loginForm.password,
     }, {
@@ -144,7 +144,7 @@ export default function AuthModals() {
   };
 
   const submitSignupForm = async () => {
-    await axios.post('http://localhost:8080/api/v1/auth/register', {
+    await axios.post('http://54.180.132.97:8080/api/v1/auth/register', {
       name: signupForm.name,
       email: signupForm.email,
       password: signupForm.password,

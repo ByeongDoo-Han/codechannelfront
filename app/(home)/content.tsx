@@ -11,7 +11,7 @@ import useStudy from "../context/StudyContext";
 import AuthModals from "../../components/modal/AuthModal";
 import Body from "./body";
 
-export default function Content({ studies }: { studies: Study[] }) {
+export default async function Content({studies}: {studies: Study[]}) {
     const { isDarkMode } = useDarkMode();
     
     return (

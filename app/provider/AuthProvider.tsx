@@ -54,7 +54,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       if (!token) return;
     
       try {
-        const response = await axios.get('http://localhost:8080/api/v1/join/studies', {
+        const response = await axios.get('http://54.180.132.97:8080/api/v1/join/studies', {
           headers: {
             Authorization: `Bearer ${token}`,
           },
@@ -76,7 +76,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
       }
 
       try {
-        await axios.post(`http://localhost:8080/api/v1/join/${studyId}`,
+        await axios.post(`http://54.180.132.97:8080/api/v1/join/${studyId}`,
           {},
           {
             headers: {

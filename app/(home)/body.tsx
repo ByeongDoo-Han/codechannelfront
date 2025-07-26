@@ -86,7 +86,7 @@ export default function Body({ studies }: { studies: Study[] }) {
     const handleJoin = async(id: number) => {
         const accessToken = localStorage.getItem('accessToken');
         console.log('요청 id:', id);
-        await axios.post(`http://localhost:8080/api/v1/join/studies/${id}`,
+        await axios.post(`http://54.180.132.97:8080/api/v1/join/studies/${id}`,
           {
             
           },
@@ -108,7 +108,7 @@ export default function Body({ studies }: { studies: Study[] }) {
       const handleUnjoin = async(id: number) => {
         const accessToken = localStorage.getItem('accessToken');
         console.log('요청 id:', id);
-        await axios.post(`http://localhost:8080/api/v1/unjoin/studies/${id}`,
+        await axios.post(`http://54.180.132.97:8080/api/v1/unjoin/studies/${id}`,
           {
             
           },
@@ -127,9 +127,6 @@ export default function Body({ studies }: { studies: Study[] }) {
           console.error(error);
         });
       }
-      // const openAddStudyModal = () => {
-      //   setIsAddStudyModalOpen(true);
-      // };
     return (
       <>
                 {/* <Header darkMode={isDarkMode} /> */}
@@ -143,7 +140,6 @@ export default function Body({ studies }: { studies: Study[] }) {
                                 joinedStudies={joinedStudies}
                                 userSelections={userSelections}
                                 isDarkMode={isDarkMode}
-                                // openAddStudyModal={openAddStudyModal}
                                 setSelectedStudy={setSelectedStudy}
                             />
                             <AddStudyModal
