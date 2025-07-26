@@ -127,9 +127,9 @@ export default function Body({ studies }: { studies: Study[] }) {
           console.error(error);
         });
       }
-      const openAddStudyModal = () => {
-        setIsAddStudyModalOpen(true);
-      };
+      // const openAddStudyModal = () => {
+      //   setIsAddStudyModalOpen(true);
+      // };
     return (
       <>
                 {/* <Header darkMode={isDarkMode} /> */}
@@ -143,16 +143,11 @@ export default function Body({ studies }: { studies: Study[] }) {
                                 joinedStudies={joinedStudies}
                                 userSelections={userSelections}
                                 isDarkMode={isDarkMode}
-                                openAddStudyModal={openAddStudyModal}
+                                // openAddStudyModal={openAddStudyModal}
                                 setSelectedStudy={setSelectedStudy}
-                                // handleAttendance={handleAttendance}
-                                // openStudyDetailPopup={openStudyDetailPopup}
                             />
                             <AddStudyModal
-                              isStudyModalOpen={isAddStudyModalOpen}
-                              closeAddStudyModal={closeAddStudyModal}
                               isDarkMode={isDarkMode}
-                              handleAddStudy={handleAddStudy}
                             />
                             <AuthModals />
                         </div>

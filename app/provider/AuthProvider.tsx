@@ -2,6 +2,7 @@
 import { AuthContext } from "../context/AuthContext";
 import React, { useState, useEffect, useCallback } from "react";
 import axios from "axios";
+import { useAuthStore } from "../stores/useAuthStore";
 
 export default function AuthProvider({ children }: { children: React.ReactNode }) {
     const [isLoggedIn, setIsLoggedIn] = useState(false);
@@ -68,7 +69,7 @@ export default function AuthProvider({ children }: { children: React.ReactNode }
     }, []);
 
     const handleJoinStudy = useCallback(async (studyId: number) => {
-      const token = localStorage.getItem('accessToken');
+      const token = useAuthStore((state) => state.accessToken);
       if (!token) {
         openLoginModal();
         return;

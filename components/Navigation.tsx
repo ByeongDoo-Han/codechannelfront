@@ -4,9 +4,11 @@ import { DarkModeContext, useDarkMode } from "../app/context/DarkModeContext";
 import useAuth from "../app/context/AuthContext";
 import DarkModeButton from "./DarkModeButton";
 import AuthModals from "./modal/AuthModal";
+import { useAuthStore } from "@/app/stores/useAuthStore";
 
 export default function Navigation() {
-    const { isLoggedIn, openLoginModal, openSignupModal, logout } = useAuth();
+    const { openLoginModal, openSignupModal } = useAuth();
+    const {isLoggedIn,logout, joinedStudies} = useAuthStore();
     const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
     const {isDarkMode} = useDarkMode();
     return (

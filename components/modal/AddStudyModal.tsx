@@ -2,63 +2,46 @@
 
 import React from 'react';
 import axios from 'axios';
+import { useAddStudyModalStore } from '@/app/stores/useAddStudyModalStore';
+import { useAddStudyMutation } from '@/app/mutation/useAddStudyMutation';
 
-interface StudyModalProps {
-  isStudyModalOpen: boolean;
-  closeAddStudyModal: () => void;
-  isDarkMode: boolean;
-  handleAddStudy: () => void;
-}
-
-export default function AddStudyModal({
-  isStudyModalOpen,
-  closeAddStudyModal,
-  isDarkMode,
-  handleAddStudy,
-}: StudyModalProps) {
+export default function AddStudyModal({ isDarkMode }: { isDarkMode: boolean }) {
+  const { isOpen, closeModal } = useAddStudyModalStore();
+  const { mutateAsync: addStudy } = useAddStudyMutation();
   const [studyForm, setStudyForm] = React.useState({
-    name: '',
-    date: '',
+    studyName: '',
+    studyDate: '',
     location: '',
   });
+  if(!isOpen) return null;
 
   const handleAddStudySubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
-      const response = await axios.post(
-        'http://localhost:8080/api/v1/studies',
+      const response = await addStudy(
         {
-          studyName: studyForm.name,
-          // description: studyForm.description,
-          studyDate: studyForm.date,
+          studyName: studyForm.studyName,
+          studyDate: studyForm.studyDate,
           location: studyForm.location,
-        },
-        {
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${localStorage.getItem('accessToken')}`,
-          },
-          withCredentials: true, // 👉 refreshToken을 HttpOnly 쿠키로 받을 때 필요
         }
       );
-      console.log('스터디 추가 성공:', response.data);
-      window.location.reload();
+      console.log('스터디 추가 성공:', response);
+      // window.location.reload();
     } catch (err) {
       console.error('스터디 추가 실패:', err);
     }
 
     console.log('스터디 추가 시도:', studyForm);
-    closeAddStudyModal();
-    setStudyForm({ name: '', date: '', location: '' });
+    closeModal();
+    setStudyForm({ studyName: '', studyDate: '', location: '' });
   };
 
   const handleCloseStudy = () => {
-    closeAddStudyModal();
-    setStudyForm({ name: '', date: '', location: '' });
+    closeModal();
+    setStudyForm({ studyName: '', studyDate: '', location: '' });
   };
 
-  if (!isStudyModalOpen) return null;
 
   return (
     <div
@@ -95,8 +78,8 @@ export default function AddStudyModal({
             <input
               type="text"
               required
-              value={studyForm.name}
-              onChange={(e) => setStudyForm({ ...studyForm, name: e.target.value })}
+              value={studyForm.studyName}
+              onChange={(e) => setStudyForm({ ...studyForm, studyName: e.target.value })}
               className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
                 isDarkMode
                   ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'
@@ -113,8 +96,8 @@ export default function AddStudyModal({
             <input
               type="date"
               required
-              value={studyForm.date}
-              onChange={(e) => setStudyForm({ ...studyForm, date: e.target.value })}
+              value={studyForm.studyDate}
+              onChange={(e) => setStudyForm({ ...studyForm, studyDate: e.target.value })}
               className={`w-full px-4 py-3 rounded-lg border focus:outline-none focus:ring-2 focus:ring-blue-500 transition-colors ${
                 isDarkMode
                   ? 'bg-gray-700 border-gray-600 text-white placeholder-gray-400'

@@ -26,7 +26,7 @@ export interface Study   {
 
 export interface StudyContextType {
   studies: Study[];
-  // selectedStudy: number | null;
+  // selectedStudy: number | null;  
   userSelections: UserSelections;
   isDarkMode: boolean;
   setSelectedStudy: (id: number) => void;
@@ -34,7 +34,6 @@ export interface StudyContextType {
   addStudy: (data: Study) => void;
   removeStudy: (id: number) => void;
   openStudyDetailPopup: (studyId: number) => void;
-  // handleAttendance: (studyId: string, action: 'attend' | 'unattend') => void;
 }
 
 export const StudyContext = createContext<StudyContextType | undefined>(undefined);

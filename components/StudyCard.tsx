@@ -1,12 +1,34 @@
 "use client";
 import { useDarkMode } from "../app/context/DarkModeContext";
 import { Study } from "../app/context/StudyContext";
-import useAuth from "../app/context/AuthContext";
-
-export default function StudyCard({ study }: { study: Study }) {
+import { useJoinStudyMutation, useUnjoinStudyMutation } from "../app/mutation/useStudyMutation";
+import axios from "axios";
+import { useQuery } from "@tanstack/react-query";
+import { useAuthStore } from "../app/stores/useAuthStore";
+import { useState, useEffect } from "react";
+export default function StudyCard({ study, isJoined }: { study: Study, isJoined: boolean }) {
     const { isDarkMode } = useDarkMode();
-    const { isLoggedIn, joinedStudies, handleJoinStudy } = useAuth();
-    const isJoined = joinedStudies.includes(study.id);
+    const {mutate: joinStudyHandler} = useJoinStudyMutation();
+    const {mutate: unjoinStudyHandler} = useUnjoinStudyMutation();
+    const token = useAuthStore.getState().accessToken;
+    
+    const {
+        data: studyMemberNames = [],
+        isLoading,
+        isError,
+      } = useQuery({
+        queryKey: ['studyMemberNames', study.id],
+        queryFn: async () => {
+          const res = await axios.get(
+            `http://localhost:8080/api/v1/studies/${study.id}/members`,
+            {
+              headers: { Authorization: `Bearer ${token}` },
+              withCredentials: true,
+            }
+          );
+          return res.data;
+        },
+      });
 
     return (
         <div 
@@ -37,7 +59,7 @@ export default function StudyCard({ study }: { study: Study }) {
                       <button
             onClick={(e) => {
               e.stopPropagation();
-              handleJoinStudy(study.id);
+              isJoined?unjoinStudyHandler(study.id):joinStudyHandler(study.id);
             }}
             className={`px-4 py-2 text-xs sm:px-3 sm:py-1 rounded-full border transition-colors ${
               isJoined
@@ -53,6 +75,16 @@ export default function StudyCard({ study }: { study: Study }) {
           </button>
                     </div>
                   </div>
+                  <div className="mt-2 flex flex-wrap gap-1">
+        {studyMemberNames.map((member: string) => (
+          <button
+            key={member}
+            className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded-full"
+          >
+            {member}
+          </button>
+        ))}
+      </div>
                 </div>
     );
 }
