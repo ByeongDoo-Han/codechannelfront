@@ -9,7 +9,7 @@ export const useJoinStudyMutation = () => {
   return useMutation({
     mutationFn: async (studyId: number) => {
       const response = await axios.post(
-        `http://54.180.132.97:8080/api/v1/join/studies/${studyId}`,
+        `https://api.dewdew.site:8080/api/v1/join/studies/${studyId}`,
         {},
         {
           headers: {
@@ -36,7 +36,7 @@ export const useUnjoinStudyMutation = () => {
   return useMutation({
     mutationFn: async (studyId: number) => {
       const response = await axios.post(
-        `http://54.180.132.97:8080/api/v1/unjoin/studies/${studyId}`,
+        `https://api.dewdew.site:8080/api/v1/unjoin/studies/${studyId}`,
         {},
         {
           headers: {
