@@ -20,7 +20,7 @@ export default function StudyCard({ study, isJoined }: { study: Study, isJoined:
         queryKey: ['studyMemberNames', study.id],
         queryFn: async () => {
           const res = await axios.get(
-            `https://api.dewdew.site:8080/api/v1/studies/${study.id}/members`,
+            `https://api.dewdew.site/api/v1/studies/${study.id}/members`,
             {
               headers: { Authorization: `Bearer ${token}` },
               withCredentials: true,

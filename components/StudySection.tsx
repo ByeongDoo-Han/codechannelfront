@@ -38,12 +38,12 @@ export default function StudySection({isDarkMode }: StudySectionProps) {
     const token = useAuthStore((state) => state.accessToken);
     const {data: studies, isLoading, error} = useQuery({
         queryKey: ['studies'],
-        queryFn: ()=>axios.get("https://api.dewdew.site:8080/api/v1/studies")
+        queryFn: ()=>axios.get("https://api.dewdew.site/api/v1/studies")
         .then(response => response.data),
     });
 
     const fetchJoinedStudies = async (token: string) => {
-        const response = await axios.get("https://api.dewdew.site:8080/api/v1/join/studies", {
+        const response = await axios.get("https://api.dewdew.site/api/v1/join/studies", {
             headers: {
                 Authorization: `Bearer ${token}`,
             },

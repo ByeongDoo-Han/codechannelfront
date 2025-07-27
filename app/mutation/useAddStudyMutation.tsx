@@ -15,7 +15,7 @@ export const useAddStudyMutation = () => {
   return useMutation({
     mutationFn: async (studyData: AddStudyRequest) => {
       const response = await axios.post(
-        'https://api.dewdew.site:8080/api/v1/studies',
+        'https://api.dewdew.site/api/v1/studies',
         studyData,
         {
           headers: {

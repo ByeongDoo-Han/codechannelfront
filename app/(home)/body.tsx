@@ -86,7 +86,7 @@ export default function Body({ studies }: { studies: Study[] }) {
     const handleJoin = async(id: number) => {
         const accessToken = localStorage.getItem('accessToken');
         console.log('요청 id:', id);
-        await axios.post(`https://api.dewdew.site:8080/api/v1/join/studies/${id}`,
+        await axios.post(`https://api.dewdew.site/api/v1/join/studies/${id}`,
           {
             
           },
@@ -108,7 +108,7 @@ export default function Body({ studies }: { studies: Study[] }) {
       const handleUnjoin = async(id: number) => {
         const accessToken = localStorage.getItem('accessToken');
         console.log('요청 id:', id);
-        await axios.post(`https://api.dewdew.site:8080/api/v1/unjoin/studies/${id}`,
+        await axios.post(`https://api.dewdew.site/api/v1/unjoin/studies/${id}`,
           {
             
           },
