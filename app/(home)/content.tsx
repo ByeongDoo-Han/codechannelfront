@@ -1,19 +1,24 @@
 "use client";
 import React, { useState, useEffect } from "react";
 import Header from "../../components/Header";
-import StudySection from "../../components/StudySection";
-import { useDarkMode } from "../context/DarkModeContext";
-import { Study, UserSelectionsMap } from "../context/StudyContext";
-import AddStudyModal from "../../components/modal/AddStudyModal";
-import useAuth from "../context/AuthContext";
-import axios from "axios";
-import useStudy from "../context/StudyContext";
-import AuthModals from "../../components/modal/AuthModal";
 import Body from "./body";
+import { useDarkMode } from "../context/DarkModeContext";
+import { Study } from "../context/StudyContext";
 
-export default async function Content({studies}: {studies: Study[]}) {
+export default function Content() {
     const { isDarkMode } = useDarkMode();
-    
+    const [studies, setStudies] = useState<Study[]>([]);
+
+    useEffect(() => {
+        const API_HOST = process.env.NEXT_PUBLIC_API_HOST;
+        const fetchStudies = async () => {
+            const response = await fetch(`${API_HOST}/api/v1/studies`);
+            const data = await response.json();
+            setStudies(data);
+        }
+        fetchStudies();
+    }, []);
+
     return (
       <div className={`min-h-screen transition-colors duration-300 ${isDarkMode ? 'bg-gray-900' : 'bg-gray-50'}`}>
         <Header/>
