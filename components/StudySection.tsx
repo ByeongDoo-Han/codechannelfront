@@ -24,8 +24,6 @@ interface StudySectionProps {
   setSelectedStudy: (id: number) => void;
 }
 
-
-
 export default function StudySection({isDarkMode }: StudySectionProps) {
     const [isAddStudyModalOpen, setIsAddStudyModalOpen] = useState(false);
     const [isStudyDetailPopupOpen, setIsStudyDetailPopupOpen] = useState(false);
@@ -34,7 +32,6 @@ export default function StudySection({isDarkMode }: StudySectionProps) {
     const {isLoggedIn, logout } = useAuth();
     const [userSelections, setUserSelections] = useState<{[studyId: string]: 'attend' | 'unattend' | null}>({});
     const {openModal, closeModal} = useAddStudyModalStore();
-    //참석/불참석처리
     const token = useAuthStore((state) => state.accessToken);
     const {data: studies, isLoading, error} = useQuery({
         queryKey: ['studies'],
