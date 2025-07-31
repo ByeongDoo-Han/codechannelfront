@@ -1,9 +1,7 @@
 "use client";
 import React, { useState } from "react";
-import { useDarkMode } from "../app/context/DarkModeContext";
 import axios from "axios";
 import useAuth from "../app/context/AuthContext";
-import useStudy from "../app/context/StudyContext";
 import StudyCard from "./StudyCard";
 import { Study } from "../app/context/StudyContext";
 import { useQuery } from "@tanstack/react-query";
